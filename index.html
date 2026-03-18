@@ -1,0 +1,176 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OASENSE</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Container */
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* Screens */
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.6s ease;
+  text-align: center;
+  padding: 20px;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Text */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1rem;
+  opacity: 0.7;
+  margin-bottom: 30px;
+}
+
+/* Buttons */
+.button {
+  border: 1px solid #fff;
+  padding: 12px 30px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Progress bar */
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: #fff;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="progress" id="progress"></div>
+
+<!-- Screen 1 -->
+<div class="screen" id="screen1">
+  <h1>Most people will fail this.</h1>
+  <p>Only continue if you actually want to change.</p>
+  <div class="button" onclick="nextScreen(1)">Enter</div>
+</div>
+
+<!-- Screen 2 -->
+<div class="screen hidden" id="screen2">
+  <h1>Do you want to stay the same?</h1>
+  <div class="button" onclick="nextScreen(2)">No</div>
+  <div class="button" onclick="exitFlow()">Yes</div>
+</div>
+
+<!-- Screen 3 -->
+<div class="screen hidden" id="screen3">
+  <h1>If given a path, would you follow it?</h1>
+  <div class="button" onclick="nextScreen(3)">Yes</div>
+  <div class="button" onclick="exitFlow()">No</div>
+</div>
+
+<!-- Screen 4 -->
+<div class="screen hidden" id="screen4">
+  <h1>What’s holding you back?</h1>
+  <div class="button" onclick="nextScreen(4)">Discipline</div>
+  <div class="button" onclick="nextScreen(4)">Focus</div>
+  <div class="button" onclick="nextScreen(4)">Confidence</div>
+</div>
+
+<!-- Screen 5 -->
+<div class="screen hidden" id="screen5">
+  <h1>Be honest.</h1>
+  <p>How consistent are you?</p>
+  <div class="button" onclick="nextScreen(5)">Not at all</div>
+  <div class="button" onclick="nextScreen(5)">Somewhat</div>
+  <div class="button" onclick="nextScreen(5)">Very</div>
+</div>
+
+<!-- Screen 6 (Result) -->
+<div class="screen hidden" id="screen6">
+  <h1>You are operating below your potential.</h1>
+  <p>Not because you can't… but because you don't.</p>
+  <div class="button" onclick="startTraining()">Continue</div>
+</div>
+
+<!-- Screen 7 (Training Intro) -->
+<div class="screen hidden" id="screen7">
+  <h1>Now it begins.</h1>
+  <p>Daily discipline. No excuses.</p>
+  <div class="button">Start Day 1</div>
+</div>
+
+</div>
+
+<script>
+let current = 1;
+const totalScreens = 7;
+
+function nextScreen(step) {
+  document.getElementById("screen" + step).classList.add("hidden");
+  document.getElementById("screen" + (step + 1)).classList.remove("hidden");
+
+  current++;
+  updateProgress();
+}
+
+function updateProgress() {
+  let percent = (current / totalScreens) * 100;
+  document.getElementById("progress").style.width = percent + "%";
+}
+
+function exitFlow() {
+  alert("Come back when you're serious.");
+}
+
+function startTraining() {
+  nextScreen(6);
+}
+</script>
+
+</body>
+</html>
+```
