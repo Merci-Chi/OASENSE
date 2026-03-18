@@ -75,16 +75,32 @@
 
     .card {
       background: rgba(12, 15, 20, 0.92);
-      border: 1px solid rgba(58, 167, 255, 0.2);
+      border: 1px solid rgba(58, 167, 255, 0.22);
       border-radius: var(--radius);
       padding: 18px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(58,167,255,0.12), transparent 55%);
+      pointer-events: none;
+    }
+
+    .card.soft {
+      background: rgba(10, 13, 18, 0.88);
+      border-color: rgba(58, 167, 255, 0.16);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.45);
     }
 
     .video-placeholder {
       height: 260px;
       border-radius: 20px;
-      background: linear-gradient(135deg, rgba(58,167,255,0.18), rgba(0,0,0,0.8));
+      background: linear-gradient(135deg, rgba(58,167,255,0.22), rgba(0,0,0,0.85));
       border: 1px solid rgba(58, 167, 255, 0.35);
       display: flex;
       align-items: center;
@@ -93,6 +109,7 @@
       font-size: 14px;
       position: relative;
       overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
     }
 
     .video-placeholder::after {
@@ -136,6 +153,13 @@
     }
 
     button:hover { transform: translateY(-2px); }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
 
     .primary {
       background: linear-gradient(120deg, var(--neon), var(--neon-2));
@@ -208,14 +232,22 @@
     .option {
       padding: 14px;
       border-radius: 12px;
-      border: 1px solid rgba(58,167,255,0.25);
-      background: rgba(8, 12, 18, 0.9);
+      border: 1px solid rgba(58,167,255,0.22);
+      background: rgba(8, 12, 18, 0.92);
       color: var(--ink);
       font-size: 14px;
-      transition: border var(--speed), box-shadow var(--speed);
+      transition: border var(--speed), box-shadow var(--speed), transform var(--speed), background var(--speed);
+      text-align: left;
     }
 
     .option:hover { border-color: var(--neon); box-shadow: var(--glow); }
+
+    .option.selected {
+      border-color: var(--neon);
+      background: linear-gradient(120deg, rgba(58,167,255,0.18), rgba(0,0,0,0.9));
+      box-shadow: var(--glow);
+      transform: translateY(-1px);
+    }
 
     .theme-row {
       display: flex;
@@ -302,8 +334,8 @@
     .task {
       padding: 12px;
       border-radius: 12px;
-      border: 1px solid rgba(58,167,255,0.2);
-      background: rgba(8,10,14,0.85);
+      border: 1px solid rgba(58,167,255,0.18);
+      background: rgba(8,10,14,0.88);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -336,7 +368,7 @@
       background: rgba(5,7,12,0.98);
       border-top: 1px solid rgba(58,167,255,0.2);
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       padding: 8px 6px 14px;
       z-index: 10;
     }
@@ -449,9 +481,11 @@
 
     <section id="welcome" class="screen active">
       <div class="top-title">Life OS</div>
-      <div class="video-placeholder">
-        <div class="overlay-text">Track who you are. Build who you’re becoming.</div>
-        <div>Looping Preview</div>
+      <div class="card soft" style="padding:14px;">
+        <div class="video-placeholder">
+          <div class="overlay-text">Track who you are. Build who you’re becoming.</div>
+          <div>Looping Preview</div>
+        </div>
       </div>
       <div class="actions">
         <button class="primary" data-next="theme">Get Started</button>
@@ -483,8 +517,8 @@
       <div class="top-title">Life OS</div>
       <div class="card">
         <div class="chip">Style</div>
-        <h3 style="margin:12px 0 6px;">Before we begin, do you want a specific flow?</h3>
-        <p style="color:var(--muted); font-size:13px; margin:0;">Don’t worry, you can change this later!</p>
+        <h3 style="margin:12px 0 6px;">Want a specific vibe?</h3>
+        <p style="color:var(--muted); font-size:13px; margin:0;">Don’t worry you can change this later!</p>
         <div class="theme-row">
           <button class="theme-chip active" data-color="#3aa7ff">Neon Blue</button>
           <button class="theme-chip" data-color="#21f4a8">Neon Green</button>
@@ -525,17 +559,20 @@
       </div>
       <div class="card">
         <h3>Which one feels most like you lately?</h3>
-        <div class="option-grid">
-          <button class="option" data-next="quiz3">Running on Low Battery</button>
-          <button class="option" data-next="quiz3">Mentally Clouded</button>
-          <button class="option" data-next="quiz3">Repeating the Same Patterns</button>
-          <button class="option" data-next="quiz3">Out of Sync</button>
-          <button class="option" data-next="quiz3">Holding Back</button>
-          <button class="option" data-next="quiz3">Constantly Distracted</button>
-          <button class="option" data-next="quiz3">Disconnected</button>
-          <button class="option" data-next="quiz3">Stuck in Your Head</button>
-          <button class="option" data-next="quiz3">No Momentum</button>
-          <button class="option" data-next="quiz3">Just Drifting</button>
+        <div class="option-grid" data-group="quiz2">
+          <button class="option" type="button">Running on Low Battery</button>
+          <button class="option" type="button">Mentally Clouded</button>
+          <button class="option" type="button">Repeating the Same Patterns</button>
+          <button class="option" type="button">Out of Sync</button>
+          <button class="option" type="button">Holding Back</button>
+          <button class="option" type="button">Constantly Distracted</button>
+          <button class="option" type="button">Disconnected</button>
+          <button class="option" type="button">Stuck in Your Head</button>
+          <button class="option" type="button">No Momentum</button>
+          <button class="option" type="button">Just Drifting</button>
+        </div>
+        <div class="actions">
+          <button class="primary continue-btn" data-next="quiz3" disabled>Continue</button>
         </div>
       </div>
     </section>
@@ -551,16 +588,19 @@
       </div>
       <div class="card">
         <h3>What are you trying to improve?</h3>
-        <div class="option-grid">
-          <button class="option" data-next="quiz4">Discipline</button>
-          <button class="option" data-next="quiz4">Energy</button>
-          <button class="option" data-next="quiz4">Calm</button>
-          <button class="option" data-next="quiz4">Direction</button>
-          <button class="option" data-next="quiz4">Financial Control</button>
-          <button class="option" data-next="quiz4">Relationships</button>
-          <button class="option" data-next="quiz4">Focus</button>
-          <button class="option" data-next="quiz4">Motivation</button>
-          <button class="option" data-next="quiz4">Growth</button>
+        <div class="option-grid" data-group="quiz3">
+          <button class="option" type="button">Discipline</button>
+          <button class="option" type="button">Energy</button>
+          <button class="option" type="button">Calm</button>
+          <button class="option" type="button">Direction</button>
+          <button class="option" type="button">Financial Control</button>
+          <button class="option" type="button">Relationships</button>
+          <button class="option" type="button">Focus</button>
+          <button class="option" type="button">Motivation</button>
+          <button class="option" type="button">Growth</button>
+        </div>
+        <div class="actions">
+          <button class="primary continue-btn" data-next="quiz4" disabled>Continue</button>
         </div>
       </div>
     </section>
@@ -576,16 +616,19 @@
       </div>
       <div class="card">
         <h3>What have you already experimented with?</h3>
-        <div class="option-grid">
-          <button class="option" data-next="quiz5">Watching self-improvement content</button>
-          <button class="option" data-next="quiz5">Journaling</button>
-          <button class="option" data-next="quiz5">Fitness routines</button>
-          <button class="option" data-next="quiz5">Meditation</button>
-          <button class="option" data-next="quiz5">Budgeting</button>
-          <button class="option" data-next="quiz5">Productivity systems</button>
-          <button class="option" data-next="quiz5">Restarting multiple times</button>
-          <button class="option" data-next="quiz5">Nothing consistent yet</button>
-          <button class="option" data-next="quiz5">I start things but don’t stick with them.</button>
+        <div class="option-grid" data-group="quiz4">
+          <button class="option" type="button">Watching self-improvement content</button>
+          <button class="option" type="button">Journaling</button>
+          <button class="option" type="button">Fitness routines</button>
+          <button class="option" type="button">Meditation</button>
+          <button class="option" type="button">Budgeting</button>
+          <button class="option" type="button">Productivity systems</button>
+          <button class="option" type="button">Restarting multiple times</button>
+          <button class="option" type="button">Nothing consistent yet</button>
+          <button class="option" type="button">I start things but don’t stick with them.</button>
+        </div>
+        <div class="actions">
+          <button class="primary continue-btn" data-next="quiz5" disabled>Continue</button>
         </div>
       </div>
     </section>
@@ -635,7 +678,7 @@
     <section id="dashboard" class="screen">
       <div class="top-title">Life OS</div>
       <div class="sections">
-        <div>
+        <div class="card soft">
           <div class="section-title">Life Balance</div>
           <div class="tasks">
             <div class="task">Mind <span>62%</span></div>
@@ -650,7 +693,7 @@
             <div class="bar"><span style="width:58%"></span></div>
           </div>
         </div>
-        <div>
+        <div class="card soft">
           <div class="section-title">Today’s Mission</div>
           <div class="tasks">
             <div class="task">Drink water <span class="pill">+10 XP</span></div>
@@ -658,7 +701,7 @@
             <div class="task">No social media before noon <span class="pill">+15 XP</span></div>
           </div>
         </div>
-        <div>
+        <div class="card soft">
           <div class="section-title">Daily Check-In</div>
           <div class="slider-row">
             <label>Energy</label>
@@ -669,7 +712,7 @@
             <input type="range" min="0" max="100" value="67" />
           </div>
         </div>
-        <div class="card" style="padding:12px;">
+        <div class="card soft" style="padding:12px;">
           <div class="streak">
             <span>Streak</span>
             <strong>6 days</strong>
@@ -919,6 +962,20 @@
           return;
         }
         showScreen(next);
+      });
+    });
+
+    document.querySelectorAll('.option-grid').forEach(grid => {
+      const options = Array.from(grid.querySelectorAll('.option'));
+      const continueBtn = grid.parentElement.querySelector('.continue-btn');
+      options.forEach(option => {
+        option.addEventListener('click', () => {
+          option.classList.toggle('selected');
+          if (continueBtn) {
+            const anySelected = options.some(btn => btn.classList.contains('selected'));
+            continueBtn.disabled = !anySelected;
+          }
+        });
       });
     });
 
