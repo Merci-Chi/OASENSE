@@ -1,176 +1,941 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OASENSE</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life OS</title>
+  <style>
+    :root {
+      --bg: #050507;
+      --panel: #0c0f14;
+      --ink: #e6f7ff;
+      --muted: #8aa0b5;
+      --neon: #3aa7ff;
+      --neon-2: #00e5ff;
+      --danger: #ff5d5d;
+      --success: #34f5a2;
+      --glow: 0 0 18px rgba(58, 167, 255, 0.45);
+      --radius: 18px;
+      --speed: 240ms;
+    }
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
+    * { box-sizing: border-box; }
 
-body {
-  background: #000;
-  color: #fff;
-  overflow: hidden;
-}
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Sora", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, rgba(58,167,255,0.15), transparent 60%), var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
 
-/* Container */
-.container {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-}
+    .app {
+      width: min(460px, 100%);
+      min-height: 100vh;
+      background: linear-gradient(180deg, rgba(10,14,20,0.92), rgba(5,7,12,0.98));
+      padding: 22px 18px 86px;
+      position: relative;
+      overflow: hidden;
+    }
 
-/* Screens */
-.screen {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.6s ease;
-  text-align: center;
-  padding: 20px;
-}
+    .glow-orb {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(58,167,255,0.4), transparent 70%);
+      top: -40px;
+      right: -40px;
+      filter: blur(4px);
+      pointer-events: none;
+    }
 
-.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
+    .screen {
+      display: none;
+      animation: fadeIn var(--speed) ease;
+    }
 
-/* Text */
-h1 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
+    .screen.active { display: block; }
 
-p {
-  font-size: 1rem;
-  opacity: 0.7;
-  margin-bottom: 30px;
-}
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-/* Buttons */
-.button {
-  border: 1px solid #fff;
-  padding: 12px 30px;
-  margin: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
+    .top-title {
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
 
-.button:hover {
-  background: #fff;
-  color: #000;
-}
+    .card {
+      background: rgba(12, 15, 20, 0.92);
+      border: 1px solid rgba(58, 167, 255, 0.2);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
 
-/* Progress bar */
-.progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: #fff;
-  width: 0%;
-  transition: width 0.4s ease;
-}
-</style>
+    .video-placeholder {
+      height: 260px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(58,167,255,0.18), rgba(0,0,0,0.8));
+      border: 1px solid rgba(58, 167, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 14px;
+      position: relative;
+      overflow: hidden;
+    }
 
+    .video-placeholder::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(58,167,255,0.18), transparent);
+      animation: sweep 2.8s infinite;
+    }
+
+    @keyframes sweep {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .overlay-text {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      right: 18px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+    }
+
+    .actions {
+      margin-top: 24px;
+      display: grid;
+      gap: 12px;
+    }
+
+    button, .btn {
+      border: none;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform var(--speed), box-shadow var(--speed);
+    }
+
+    button:hover { transform: translateY(-2px); }
+
+    .primary {
+      background: linear-gradient(120deg, var(--neon), var(--neon-2));
+      color: #031018;
+      box-shadow: var(--glow);
+    }
+
+    .secondary {
+      background: transparent;
+      color: var(--neon);
+      border: 1px solid rgba(58,167,255,0.45);
+    }
+
+    .small-note {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .input {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .input label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .input input {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(58,167,255,0.3);
+      background: rgba(8,10,14,0.9);
+      color: var(--ink);
+    }
+
+    .link {
+      color: var(--neon);
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .progress span {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(58,167,255,0.15);
+    }
+
+    .progress span.active {
+      background: var(--neon);
+      box-shadow: var(--glow);
+    }
+
+    .option-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .option {
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(58,167,255,0.25);
+      background: rgba(8, 12, 18, 0.9);
+      color: var(--ink);
+      font-size: 14px;
+      transition: border var(--speed), box-shadow var(--speed);
+    }
+
+    .option:hover { border-color: var(--neon); box-shadow: var(--glow); }
+
+    .theme-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .theme-chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(58,167,255,0.35);
+      background: rgba(6,10,15,0.9);
+      color: var(--ink);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .theme-chip.active { box-shadow: var(--glow); border-color: var(--neon); }
+
+    .center {
+      text-align: center;
+    }
+
+    .loading {
+      padding: 40px 0;
+      display: grid;
+      gap: 14px;
+      place-items: center;
+    }
+
+    .spinner {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 4px solid rgba(58,167,255,0.2);
+      border-top-color: var(--neon);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .chip {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(58,167,255,0.12);
+      color: var(--neon);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .sections {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(58,167,255,0.1);
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(120deg, var(--neon), var(--neon-2));
+    }
+
+    .tasks {
+      display: grid;
+      gap: 10px;
+    }
+
+    .task {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(58,167,255,0.2);
+      background: rgba(8,10,14,0.85);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .slider-row {
+      display: grid;
+      gap: 10px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--neon);
+    }
+
+    .streak {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: min(460px, 100%);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(5,7,12,0.98);
+      border-top: 1px solid rgba(58,167,255,0.2);
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      padding: 8px 6px 14px;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      background: none;
+      color: var(--muted);
+      font-size: 10px;
+      border: none;
+      display: grid;
+      gap: 4px;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .nav-btn.active { color: var(--neon); }
+
+    .tab {
+      display: none;
+      animation: fadeIn var(--speed) ease;
+    }
+
+    .tab.active { display: block; }
+
+    .skill-tree {
+      display: grid;
+      gap: 16px;
+    }
+
+    .branch {
+      border: 1px solid rgba(58,167,255,0.25);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(8,12,18,0.85);
+    }
+
+    .node {
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(12,15,20,0.9);
+      border: 1px solid rgba(58,167,255,0.18);
+      margin-top: 10px;
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .node.locked {
+      opacity: 0.4;
+    }
+
+    .missions {
+      display: grid;
+      gap: 16px;
+    }
+
+    .mission-group {
+      border-radius: 16px;
+      border: 1px solid rgba(58,167,255,0.2);
+      padding: 14px;
+      background: rgba(8, 12, 18, 0.88);
+    }
+
+    .stats {
+      display: grid;
+      gap: 12px;
+    }
+
+    .goal-card {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(58,167,255,0.2);
+      background: rgba(10, 14, 20, 0.88);
+    }
+
+    .journal {
+      display: grid;
+      gap: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 14px;
+      border: 1px solid rgba(58,167,255,0.25);
+      background: rgba(8, 10, 16, 0.9);
+      color: var(--ink);
+      padding: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(58,167,255,0.12);
+      font-size: 11px;
+      color: var(--neon);
+    }
+
+    .divider { height: 1px; background: rgba(58,167,255,0.1); margin: 12px 0; }
+  </style>
 </head>
 <body>
+  <div class="app">
+    <div class="glow-orb"></div>
 
-<div class="container">
+    <section id="welcome" class="screen active">
+      <div class="top-title">Life OS</div>
+      <div class="video-placeholder">
+        <div class="overlay-text">Track who you are. Build who you’re becoming.</div>
+        <div>Looping Preview</div>
+      </div>
+      <div class="actions">
+        <button class="primary" data-next="theme">Get Started</button>
+        <button class="secondary" data-next="login">Log In</button>
+      </div>
+      <div class="small-note">Takes less than 60 seconds.</div>
+    </section>
 
-<div class="progress" id="progress"></div>
+    <section id="login" class="screen">
+      <div class="top-title">Life OS</div>
+      <div class="card">
+        <div class="section-title">Welcome back</div>
+        <div class="input">
+          <label>Email</label>
+          <input type="email" placeholder="you@email.com" />
+        </div>
+        <div class="input">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" />
+        </div>
+        <a class="link" href="#">Forgot Password?</a>
+        <div class="actions" style="margin-top:16px;">
+          <button class="primary" data-next="dashboard">Continue</button>
+        </div>
+      </div>
+    </section>
 
-<!-- Screen 1 -->
-<div class="screen" id="screen1">
-  <h1>Most people will fail this.</h1>
-  <p>Only continue if you actually want to change.</p>
-  <div class="button" onclick="nextScreen(1)">Enter</div>
-</div>
+    <section id="theme" class="screen">
+      <div class="top-title">Life OS</div>
+      <div class="card">
+        <div class="chip">Style</div>
+        <h3 style="margin:12px 0 6px;">Want a specific vibe?</h3>
+        <p style="color:var(--muted); font-size:13px; margin:0;">Don’t worry you can change this later!</p>
+        <div class="theme-row">
+          <button class="theme-chip active" data-color="#3aa7ff">Neon Blue</button>
+          <button class="theme-chip" data-color="#21f4a8">Neon Green</button>
+          <button class="theme-chip" data-color="#ff5df4">Neon Pink</button>
+          <button class="theme-chip" data-color="#ffb347">Neon Amber</button>
+        </div>
+        <div class="actions" style="margin-top:16px;">
+          <button class="primary" data-next="quiz1">Continue</button>
+        </div>
+      </div>
+    </section>
 
-<!-- Screen 2 -->
-<div class="screen hidden" id="screen2">
-  <h1>Do you want to stay the same?</h1>
-  <div class="button" onclick="nextScreen(2)">No</div>
-  <div class="button" onclick="exitFlow()">Yes</div>
-</div>
+    <section id="quiz1" class="screen">
+      <div class="progress">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="card center">
+        <h3>Let’s figure out where you are right now. No fluff. Just clarity.</h3>
+        <div class="actions">
+          <button class="primary" data-next="quiz2">Start</button>
+        </div>
+      </div>
+    </section>
 
-<!-- Screen 3 -->
-<div class="screen hidden" id="screen3">
-  <h1>If given a path, would you follow it?</h1>
-  <div class="button" onclick="nextScreen(3)">Yes</div>
-  <div class="button" onclick="exitFlow()">No</div>
-</div>
+    <section id="quiz2" class="screen">
+      <div class="progress">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="card">
+        <h3>Which one feels most like you lately?</h3>
+        <div class="option-grid">
+          <button class="option" data-next="quiz3">Running on Low Battery</button>
+          <button class="option" data-next="quiz3">Mentally Clouded</button>
+          <button class="option" data-next="quiz3">Repeating the Same Patterns</button>
+          <button class="option" data-next="quiz3">Out of Sync</button>
+          <button class="option" data-next="quiz3">Holding Back</button>
+          <button class="option" data-next="quiz3">Constantly Distracted</button>
+          <button class="option" data-next="quiz3">Disconnected</button>
+          <button class="option" data-next="quiz3">Stuck in Your Head</button>
+          <button class="option" data-next="quiz3">No Momentum</button>
+          <button class="option" data-next="quiz3">Just Drifting</button>
+        </div>
+      </div>
+    </section>
 
-<!-- Screen 4 -->
-<div class="screen hidden" id="screen4">
-  <h1>What’s holding you back?</h1>
-  <div class="button" onclick="nextScreen(4)">Discipline</div>
-  <div class="button" onclick="nextScreen(4)">Focus</div>
-  <div class="button" onclick="nextScreen(4)">Confidence</div>
-</div>
+    <section id="quiz3" class="screen">
+      <div class="progress">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="card">
+        <h3>What are you trying to improve?</h3>
+        <div class="option-grid">
+          <button class="option" data-next="quiz4">Discipline</button>
+          <button class="option" data-next="quiz4">Energy</button>
+          <button class="option" data-next="quiz4">Calm</button>
+          <button class="option" data-next="quiz4">Direction</button>
+          <button class="option" data-next="quiz4">Financial Control</button>
+          <button class="option" data-next="quiz4">Relationships</button>
+          <button class="option" data-next="quiz4">Focus</button>
+          <button class="option" data-next="quiz4">Motivation</button>
+          <button class="option" data-next="quiz4">Growth</button>
+        </div>
+      </div>
+    </section>
 
-<!-- Screen 5 -->
-<div class="screen hidden" id="screen5">
-  <h1>Be honest.</h1>
-  <p>How consistent are you?</p>
-  <div class="button" onclick="nextScreen(5)">Not at all</div>
-  <div class="button" onclick="nextScreen(5)">Somewhat</div>
-  <div class="button" onclick="nextScreen(5)">Very</div>
-</div>
+    <section id="quiz4" class="screen">
+      <div class="progress">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="card">
+        <h3>What have you already experimented with?</h3>
+        <div class="option-grid">
+          <button class="option" data-next="quiz5">Watching self-improvement content</button>
+          <button class="option" data-next="quiz5">Journaling</button>
+          <button class="option" data-next="quiz5">Fitness routines</button>
+          <button class="option" data-next="quiz5">Meditation</button>
+          <button class="option" data-next="quiz5">Budgeting</button>
+          <button class="option" data-next="quiz5">Productivity systems</button>
+          <button class="option" data-next="quiz5">Restarting multiple times</button>
+          <button class="option" data-next="quiz5">Nothing consistent yet</button>
+          <button class="option" data-next="quiz5">I start things but don’t stick with them.</button>
+        </div>
+      </div>
+    </section>
 
-<!-- Screen 6 (Result) -->
-<div class="screen hidden" id="screen6">
-  <h1>You are operating below your potential.</h1>
-  <p>Not because you can't… but because you don't.</p>
-  <div class="button" onclick="startTraining()">Continue</div>
-</div>
+    <section id="quiz5" class="screen">
+      <div class="progress">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span></span>
+      </div>
+      <div class="card loading">
+        <div class="spinner"></div>
+        <h3>Analyzing your patterns…</h3>
+      </div>
+    </section>
 
-<!-- Screen 7 (Training Intro) -->
-<div class="screen hidden" id="screen7">
-  <h1>Now it begins.</h1>
-  <p>Daily discipline. No excuses.</p>
-  <div class="button">Start Day 1</div>
-</div>
+    <section id="quiz6" class="screen">
+      <div class="progress">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+      </div>
+      <div class="card">
+        <div class="chip">Identity</div>
+        <h3 style="margin-top:10px;">The Drifter</h3>
+        <p style="color:var(--muted); font-size:13px;">You’ve got momentum potential, but your systems are scattered. We’ll focus on clarity, small wins, and consistent inputs.</p>
+        <div class="divider"></div>
+        <div class="section-title">Focus Areas</div>
+        <div class="tasks">
+          <div class="task">Mind <span class="pill">Low Focus</span></div>
+          <div class="task">Body <span class="pill">Low Energy</span></div>
+          <div class="task">Money <span class="pill">Low Awareness</span></div>
+        </div>
+        <p style="color:var(--muted); font-size:12px; margin-top:12px;">Want a deeper breakdown? Unlock your full life assessment later.</p>
+        <div class="actions">
+          <button class="primary" data-next="dashboard">Enter Dashboard</button>
+        </div>
+      </div>
+    </section>
 
-</div>
+    <section id="dashboard" class="screen">
+      <div class="top-title">Life OS</div>
+      <div class="sections">
+        <div>
+          <div class="section-title">Life Balance</div>
+          <div class="tasks">
+            <div class="task">Mind <span>62%</span></div>
+            <div class="bar"><span style="width:62%"></span></div>
+            <div class="task">Body <span>48%</span></div>
+            <div class="bar"><span style="width:48%"></span></div>
+            <div class="task">Soul <span>55%</span></div>
+            <div class="bar"><span style="width:55%"></span></div>
+            <div class="task">Money <span>41%</span></div>
+            <div class="bar"><span style="width:41%"></span></div>
+            <div class="task">Relationships <span>58%</span></div>
+            <div class="bar"><span style="width:58%"></span></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title">Today’s Mission</div>
+          <div class="tasks">
+            <div class="task">Drink water <span class="pill">+10 XP</span></div>
+            <div class="task">20 min movement <span class="pill">+20 XP</span></div>
+            <div class="task">No social media before noon <span class="pill">+15 XP</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title">Daily Check-In</div>
+          <div class="slider-row">
+            <label>Energy</label>
+            <input type="range" min="0" max="100" value="60" />
+            <label>Focus</label>
+            <input type="range" min="0" max="100" value="52" />
+            <label>Mood</label>
+            <input type="range" min="0" max="100" value="67" />
+          </div>
+        </div>
+        <div class="card" style="padding:12px;">
+          <div class="streak">
+            <span>Streak</span>
+            <strong>6 days</strong>
+          </div>
+          <div class="streak">
+            <span>XP</span>
+            <strong>1,240</strong>
+          </div>
+          <div class="streak">
+            <span>Identity</span>
+            <strong>Drifter → Builder</strong>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<script>
-let current = 1;
-const totalScreens = 7;
+    <section id="skilltree" class="screen">
+      <div class="top-title">Skill Tree</div>
+      <div class="skill-tree">
+        <div class="branch">
+          <div class="section-title">Mind</div>
+          <div class="node">
+            <strong>Focus</strong>
+            <div class="bar"><span style="width:45%"></span></div>
+            <div>Level 4 / 10 · Level up by completing focus sessions.</div>
+          </div>
+          <div class="node">
+            <strong>Discipline</strong>
+            <div class="bar"><span style="width:35%"></span></div>
+            <div>Level 3 / 10 · Lock in a daily mission streak.</div>
+          </div>
+          <div class="node locked">
+            <strong>Confidence</strong>
+            <div class="bar"><span style="width:10%"></span></div>
+            <div>Unlock after Focus hits level 6.</div>
+          </div>
+          <div class="node locked">
+            <strong>Creativity</strong>
+            <div class="bar"><span style="width:8%"></span></div>
+            <div>Unlock after Discipline hits level 6.</div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="section-title">Body</div>
+          <div class="node">
+            <strong>Energy</strong>
+            <div class="bar"><span style="width:52%"></span></div>
+            <div>Level 5 / 10 · Move 20 minutes daily.</div>
+          </div>
+          <div class="node locked">
+            <strong>Strength</strong>
+            <div class="bar"><span style="width:12%"></span></div>
+            <div>Unlock after Energy hits level 6.</div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="section-title">Soul</div>
+          <div class="node">
+            <strong>Calm</strong>
+            <div class="bar"><span style="width:40%"></span></div>
+            <div>Level 4 / 10 · 5-minute breath resets.</div>
+          </div>
+          <div class="node locked">
+            <strong>Presence</strong>
+            <div class="bar"><span style="width:15%"></span></div>
+            <div>Unlock after Calm hits level 6.</div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="section-title">Money</div>
+          <div class="node">
+            <strong>Clarity</strong>
+            <div class="bar"><span style="width:28%"></span></div>
+            <div>Level 2 / 10 · Track spending for 7 days.</div>
+          </div>
+          <div class="node locked">
+            <strong>Control</strong>
+            <div class="bar"><span style="width:6%"></span></div>
+            <div>Unlock after Clarity hits level 5.</div>
+          </div>
+        </div>
+        <div class="branch">
+          <div class="section-title">Relationships</div>
+          <div class="node">
+            <strong>Connection</strong>
+            <div class="bar"><span style="width:32%"></span></div>
+            <div>Level 3 / 10 · Reach out to one person.</div>
+          </div>
+          <div class="node locked">
+            <strong>Trust</strong>
+            <div class="bar"><span style="width:9%"></span></div>
+            <div>Unlock after Connection hits level 6.</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-function nextScreen(step) {
-  document.getElementById("screen" + step).classList.add("hidden");
-  document.getElementById("screen" + (step + 1)).classList.remove("hidden");
+    <section id="missions" class="screen">
+      <div class="top-title">Missions</div>
+      <div class="missions">
+        <div class="mission-group">
+          <div class="section-title">Daily Missions</div>
+          <div class="tasks">
+            <div class="task">Drink 2L water <span class="pill">+10 XP</span></div>
+            <div class="task">10 min journal <span class="pill">+15 XP</span></div>
+          </div>
+        </div>
+        <div class="mission-group">
+          <div class="section-title">Weekly Missions</div>
+          <div class="tasks">
+            <div class="task">Plan the week in 20 minutes <span class="pill">+40 XP</span></div>
+            <div class="task">One deep work session <span class="pill">+50 XP</span></div>
+          </div>
+        </div>
+        <div class="mission-group">
+          <div class="section-title">Level Shifts</div>
+          <div class="tasks">
+            <div class="task">Define your 1-year direction <span class="pill">+200 XP</span></div>
+            <div class="task">Have an important conversation <span class="pill">+150 XP</span></div>
+          </div>
+        </div>
+        <div class="mission-group">
+          <div class="section-title">Guided Journal</div>
+          <div class="journal">
+            <label class="section-title">What drained you today?</label>
+            <textarea placeholder="Type here..."></textarea>
+            <label class="section-title">What gave you energy?</label>
+            <textarea placeholder="Type here..."></textarea>
+            <label class="section-title">What did you avoid?</label>
+            <textarea placeholder="Type here..."></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  current++;
-  updateProgress();
-}
+    <section id="courses" class="screen">
+      <div class="top-title">Courses</div>
+      <div class="card">
+        <div class="section-title">Focus Track</div>
+        <p style="color:var(--muted); font-size:13px;">Short, sharp lessons that unlock after daily missions.</p>
+        <div class="tasks">
+          <div class="task">Module 1: Momentum Basics <span class="pill">Unlocked</span></div>
+          <div class="task">Module 2: Digital Boundaries <span class="pill">Locked</span></div>
+          <div class="task">Module 3: Deep Work Rituals <span class="pill">Locked</span></div>
+        </div>
+      </div>
+    </section>
 
-function updateProgress() {
-  let percent = (current / totalScreens) * 100;
-  document.getElementById("progress").style.width = percent + "%";
-}
+    <section id="progress" class="screen">
+      <div class="top-title">Progress</div>
+      <div class="stats">
+        <div class="card">
+          <div class="section-title">Weekly Consistency</div>
+          <div class="bar"><span style="width:72%"></span></div>
+          <p style="color:var(--muted); font-size:12px;">5/7 days completed</p>
+        </div>
+        <div class="card">
+          <div class="section-title">Habit Completion</div>
+          <div class="bar"><span style="width:61%"></span></div>
+          <p style="color:var(--muted); font-size:12px;">61% this week</p>
+        </div>
+        <div class="card">
+          <div class="section-title">Skill Improvements</div>
+          <div class="bar"><span style="width:54%"></span></div>
+          <p style="color:var(--muted); font-size:12px;">+3 levels gained</p>
+        </div>
+      </div>
+    </section>
 
-function exitFlow() {
-  alert("Come back when you're serious.");
-}
+    <section id="goals" class="screen">
+      <div class="top-title">Goals</div>
+      <div class="goal-card">
+        <div class="section-title">Active Goal</div>
+        <div class="tasks">
+          <div class="task">Build discipline <span class="pill">Active</span></div>
+        </div>
+        <div class="divider"></div>
+        <div class="section-title">Choose one focus</div>
+        <div class="option-grid">
+          <button class="option">Improve fitness</button>
+          <button class="option">Gain financial control</button>
+          <button class="option">Build discipline</button>
+        </div>
+      </div>
+    </section>
 
-function startTraining() {
-  nextScreen(6);
-}
-</script>
+    <section id="profile" class="screen">
+      <div class="top-title">Profile</div>
+      <div class="sections">
+        <div class="card">
+          <div class="section-title">Settings</div>
+          <div class="tasks">
+            <div class="task">Notifications <span class="pill">On</span></div>
+            <div class="task">Retake onboarding quiz <span class="pill">Start</span></div>
+            <div class="task">Unlock deeper assessment <span class="pill">Premium</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title">Identity Progression</div>
+          <p style="color:var(--muted); font-size:12px;">Drifter → Builder → Focused → Disciplined</p>
+        </div>
+      </div>
+    </section>
 
+    <nav class="bottom-nav" id="nav" style="display:none;">
+      <button class="nav-btn active" data-tab="dashboard">Home</button>
+      <button class="nav-btn" data-tab="skilltree">Skill Tree</button>
+      <button class="nav-btn" data-tab="missions">Missions</button>
+      <button class="nav-btn" data-tab="courses">Courses</button>
+      <button class="nav-btn" data-tab="progress">Progress</button>
+      <button class="nav-btn" data-tab="goals">Goals</button>
+      <button class="nav-btn" data-tab="profile">Profile</button>
+    </nav>
+  </div>
+
+  <script>
+    const screens = document.querySelectorAll('.screen');
+    const nav = document.getElementById('nav');
+
+    function showScreen(id) {
+      screens.forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+      if (["dashboard","skilltree","missions","courses","progress","goals","profile"].includes(id)) {
+        nav.style.display = 'grid';
+        showTab(id);
+      } else {
+        nav.style.display = 'none';
+      }
+    }
+
+    function showTab(id) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === id);
+      });
+    }
+
+    document.querySelectorAll('[data-next]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const next = btn.dataset.next;
+        if (next === 'quiz5') {
+          showScreen('quiz5');
+          setTimeout(() => showScreen('quiz6'), 1400);
+          return;
+        }
+        showScreen(next);
+      });
+    });
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showScreen(btn.dataset.tab);
+      });
+    });
+
+    document.querySelectorAll('.theme-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.theme-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const color = chip.dataset.color;
+        document.documentElement.style.setProperty('--neon', color);
+      });
+    });
+  </script>
 </body>
 </html>
-```
