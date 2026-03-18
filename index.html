@@ -6,14 +6,13 @@
   <title>Life OS</title>
   <style>
     :root {
-      --bg: #050507;
-      --panel: #0c0f14;
-      --ink: #e6f7ff;
-      --muted: #8aa0b5;
+      --bg: #05070b;
+      --panel: #0b0f16;
+      --panel-2: #0e131c;
+      --ink: #e9f6ff;
+      --muted: #91a0b5;
       --neon: #3aa7ff;
       --neon-2: #00e5ff;
-      --danger: #ff5d5d;
-      --success: #34f5a2;
       --glow: 0 0 18px rgba(58, 167, 255, 0.45);
       --radius: 18px;
       --speed: 240ms;
@@ -24,11 +23,97 @@
     body {
       margin: 0;
       font-family: "Space Grotesk", "Sora", "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, rgba(58,167,255,0.15), transparent 60%), var(--bg);
+      background: var(--bg);
       color: var(--ink);
       min-height: 100vh;
       display: flex;
       justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .bg-anim {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-anim::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(58,167,255,0.22), transparent 55%),
+        radial-gradient(circle at 80% 15%, rgba(0,229,255,0.16), transparent 55%),
+        radial-gradient(circle at 30% 85%, rgba(58,167,255,0.14), transparent 55%),
+        linear-gradient(120deg, rgba(5,7,12,0.95), rgba(8,12,18,0.92), rgba(5,7,12,0.98));
+      background-size: 140% 140%;
+      animation: gradientDrift 18s ease-in-out infinite;
+      filter: blur(6px);
+    }
+
+    .bg-anim::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(58,167,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58,167,255,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+      transform: perspective(800px) rotateX(70deg);
+      transform-origin: top;
+    }
+
+    .stars {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.7), transparent 60%),
+        radial-gradient(1px 1px at 70% 10%, rgba(255,255,255,0.6), transparent 60%),
+        radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.5), transparent 60%),
+        radial-gradient(2px 2px at 85% 60%, rgba(255,255,255,0.6), transparent 60%),
+        radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,0.6), transparent 60%),
+        radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.5), transparent 60%);
+      opacity: 0.45;
+      animation: starDrift 36s linear infinite;
+    }
+
+    .particles span {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(58,167,255,0.9);
+      box-shadow: 0 0 12px rgba(58,167,255,0.9);
+      opacity: 0.6;
+      animation: float 12s linear infinite;
+    }
+
+    .particles span:nth-child(1) { left: 10%; top: 20%; animation-duration: 14s; }
+    .particles span:nth-child(2) { left: 80%; top: 10%; animation-duration: 16s; }
+    .particles span:nth-child(3) { left: 55%; top: 35%; animation-duration: 12s; }
+    .particles span:nth-child(4) { left: 20%; top: 70%; animation-duration: 18s; }
+    .particles span:nth-child(5) { left: 70%; top: 75%; animation-duration: 15s; }
+    .particles span:nth-child(6) { left: 35%; top: 50%; animation-duration: 13s; }
+    .particles span:nth-child(7) { left: 90%; top: 45%; animation-duration: 17s; }
+    .particles span:nth-child(8) { left: 5%; top: 55%; animation-duration: 19s; }
+
+    @keyframes gradientDrift {
+      0% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(-4%, -2%, 0); }
+      100% { transform: translate3d(0, 0, 0); }
+    }
+
+    @keyframes starDrift {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(40px); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); opacity: 0.4; }
+      50% { transform: translateY(-40px) scale(1.2); opacity: 0.8; }
+      100% { transform: translateY(-80px) scale(0.9); opacity: 0; }
     }
 
     .app {
@@ -38,16 +123,17 @@
       padding: 22px 18px 86px;
       position: relative;
       overflow: hidden;
+      z-index: 1;
     }
 
     .glow-orb {
       position: absolute;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(58,167,255,0.4), transparent 70%);
-      top: -40px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(58,167,255,0.45), transparent 70%);
+      top: -60px;
       right: -40px;
-      filter: blur(4px);
+      filter: blur(8px);
       pointer-events: none;
     }
 
@@ -268,9 +354,7 @@
 
     .theme-chip.active { box-shadow: var(--glow); border-color: var(--neon); }
 
-    .center {
-      text-align: center;
-    }
+    .center { text-align: center; }
 
     .loading {
       padding: 40px 0;
@@ -301,10 +385,7 @@
       text-transform: uppercase;
     }
 
-    .sections {
-      display: grid;
-      gap: 18px;
-    }
+    .sections { display: grid; gap: 18px; }
 
     .section-title {
       font-size: 14px;
@@ -326,10 +407,7 @@
       background: linear-gradient(120deg, var(--neon), var(--neon-2));
     }
 
-    .tasks {
-      display: grid;
-      gap: 10px;
-    }
+    .tasks { display: grid; gap: 10px; }
 
     .task {
       padding: 12px;
@@ -342,15 +420,9 @@
       font-size: 13px;
     }
 
-    .slider-row {
-      display: grid;
-      gap: 10px;
-    }
+    .slider-row { display: grid; gap: 10px; }
 
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--neon);
-    }
+    input[type="range"] { width: 100%; accent-color: var(--neon); }
 
     .streak {
       display: flex;
@@ -386,17 +458,7 @@
 
     .nav-btn.active { color: var(--neon); }
 
-    .tab {
-      display: none;
-      animation: fadeIn var(--speed) ease;
-    }
-
-    .tab.active { display: block; }
-
-    .skill-tree {
-      display: grid;
-      gap: 16px;
-    }
+    .skill-tree { display: grid; gap: 16px; }
 
     .branch {
       border: 1px solid rgba(58,167,255,0.25);
@@ -416,14 +478,9 @@
       font-size: 12px;
     }
 
-    .node.locked {
-      opacity: 0.4;
-    }
+    .node.locked { opacity: 0.4; }
 
-    .missions {
-      display: grid;
-      gap: 16px;
-    }
+    .missions { display: grid; gap: 16px; }
 
     .mission-group {
       border-radius: 16px;
@@ -432,10 +489,7 @@
       background: rgba(8, 12, 18, 0.88);
     }
 
-    .stats {
-      display: grid;
-      gap: 12px;
-    }
+    .stats { display: grid; gap: 12px; }
 
     .goal-card {
       display: grid;
@@ -446,10 +500,7 @@
       background: rgba(10, 14, 20, 0.88);
     }
 
-    .journal {
-      display: grid;
-      gap: 10px;
-    }
+    .journal { display: grid; gap: 10px; }
 
     textarea {
       width: 100%;
@@ -476,6 +527,14 @@
   </style>
 </head>
 <body>
+  <div class="bg-anim">
+    <div class="stars"></div>
+    <div class="particles">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
   <div class="app">
     <div class="glow-orb"></div>
 
@@ -892,9 +951,9 @@
         <div class="divider"></div>
         <div class="section-title">Choose one focus</div>
         <div class="option-grid">
-          <button class="option">Improve fitness</button>
-          <button class="option">Gain financial control</button>
-          <button class="option">Build discipline</button>
+          <button class="option" type="button">Improve fitness</button>
+          <button class="option" type="button">Gain financial control</button>
+          <button class="option" type="button">Build discipline</button>
         </div>
       </div>
     </section>
@@ -945,7 +1004,6 @@
     }
 
     function showTab(id) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       const target = document.getElementById(id);
       if (target) target.classList.add('active');
       document.querySelectorAll('.nav-btn').forEach(btn => {
