@@ -1206,16 +1206,17 @@
     const makeKey = (a, b) => [a, b].sort().join('||');
     const reviewMap = new Map(reviewPairs.map(([a, b, meaning]) => [makeKey(a, b), meaning]));
     const singleMap = new Map([
-      [\"I don’t feel fully present in my life.\", \"Feeling disconnected; life is happening around you instead of through you.\"],
-      [\"Why do I keep falling back into the same old habits?\", \"Struggling with change; patterns feel hard to break even when you want to.\"],
-      [\"I don’t have a system or structure to stay consistent.\", \"Lacks a framework or routine; progress is difficult without a plan.\"],
-      [\"Some days I’m motivated, and some days… nothing.\", \"Motivation swings; effort is inconsistent and unpredictable.\"],
-      [\"I overthink everything and then can’t even start.\", \"Analysis paralysis; the mind blocks action before it begins.\"],
-      [\"It's just too easy to get distracted.\", \"External interruptions or lack of focus make it hard to stay on track.\"],
-      [\"I just feel so drained all the time.\", \"Low energy; physical or emotional fatigue is getting in the way of progress.\"],
-      [\"I try things, but it feels like I’m not getting anywhere.\", \"Effort is happening, but clarity, strategy, or results are missing.\"],
-      [\"I know I can do more, but I’m not living up to my goals.\", \"Aware of untapped potential; frustrated by the gap between capability and action.\"],
-      [\"I know what I should do… I just need a little support.\", \"Has knowledge and intent; just needs guidance, accountability, or a push to follow through.\"]\n    ]);
+      ["I don’t feel fully present in my life.", "Feeling disconnected; life is happening around you instead of through you."],
+      ["Why do I keep falling back into the same old habits?", "Struggling with change; patterns feel hard to break even when you want to."],
+      ["I don’t have a system or structure to stay consistent.", "Lacks a framework or routine; progress is difficult without a plan."],
+      ["Some days I’m motivated, and some days… nothing.", "Motivation swings; effort is inconsistent and unpredictable."],
+      ["I overthink everything and then can’t even start.", "Analysis paralysis; the mind blocks action before it begins."],
+      ["It's just too easy to get distracted.", "External interruptions or lack of focus make it hard to stay on track."],
+      ["I just feel so drained all the time.", "Low energy; physical or emotional fatigue is getting in the way of progress."],
+      ["I try things, but it feels like I’m not getting anywhere.", "Effort is happening, but clarity, strategy, or results are missing."],
+      ["I know I can do more, but I’m not living up to my goals.", "Aware of untapped potential; frustrated by the gap between capability and action."],
+      ["I know what I should do… I just need a little support.", "Has knowledge and intent; just needs guidance, accountability, or a push to follow through."]
+    ]);
 
     function updateReview() {
       const grid = document.querySelector('.option-grid[data-group=\"quiz2\"]');
