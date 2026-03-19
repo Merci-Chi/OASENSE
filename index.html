@@ -1219,19 +1219,19 @@
     ]);
 
     function updateReview() {
-      const grid = document.querySelector('.option-grid[data-group=\"quiz2\"]');
+      const grid = document.querySelector('.option-grid[data-group="quiz2"]');
       const tags = document.getElementById('reviewTags');
       const meaning = document.getElementById('reviewMeaning');
       if (!grid || !tags || !meaning) return;
       const selections = Array.from(grid.querySelectorAll('.option.selected')).map(btn => btn.textContent.trim());
-      tags.innerHTML = selections.map(text => `<span class=\"tag\">${text}</span>`).join('') || '<span class=\"tag\">No selections yet</span>';
+      tags.innerHTML = selections.map(text => `<span class="tag">${text}</span>`).join('') || '<span class="tag">No selections yet</span>';
       if (selections.length >= 2) {
         const key = [selections[0], selections[1]].sort().join('||');
-        meaning.textContent = reviewMap.get(key) || \"You're juggling multiple pressures. We'll start by simplifying your focus and building small, reliable wins.\";
+        meaning.textContent = reviewMap.get(key) || "You're juggling multiple pressures. We'll start by simplifying your focus and building small, reliable wins.";
       } else if (selections.length === 1) {
-        meaning.textContent = singleMap.get(selections[0]) || \"We’ll start by building clarity around this area.\";
+        meaning.textContent = singleMap.get(selections[0]) || "We’ll start by building clarity around this area.";
       } else {
-        meaning.textContent = \"Pick up to two options to see a focused insight.\";
+        meaning.textContent = "Pick up to two options to see a focused insight.";
       }
     }
 
