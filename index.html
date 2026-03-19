@@ -198,6 +198,16 @@
       box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
     }
 
+    .video-placeholder video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.55;
+      filter: saturate(0.9) contrast(1.1);
+    }
+
     .video-placeholder::after {
       content: "";
       position: absolute;
@@ -231,7 +241,7 @@
     button, .btn {
       border: none;
       padding: 14px 18px;
-      border-radius: 14px;
+      border-radius: 999px;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
@@ -317,7 +327,7 @@
 
     .option {
       padding: 14px;
-      border-radius: 12px;
+      border-radius: 20px;
       border: 1px solid rgba(58,167,255,0.22);
       background: rgba(8, 12, 18, 0.92);
       color: var(--ink);
@@ -333,6 +343,28 @@
       background: linear-gradient(120deg, rgba(58,167,255,0.18), rgba(0,0,0,0.9));
       box-shadow: var(--glow);
       transform: translateY(-1px);
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .review-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      border: 1px solid rgba(58,167,255,0.3);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--ink);
+      background: rgba(8,12,18,0.8);
     }
 
     .theme-row {
@@ -514,6 +546,9 @@
       to { transform: rotate(360deg); }
     }
 
+    .nav-btn.home .plus { opacity: 0; transition: opacity var(--speed); }
+    .nav-btn.home:hover .plus { opacity: 1; }
+
     .skill-tree { display: grid; gap: 16px; }
 
     .branch {
@@ -598,6 +633,7 @@
       <div class="top-title">Life OS</div>
       <div class="card soft" style="padding:14px;">
         <div class="video-placeholder">
+          <video src="/Users/kiarawilliams/Downloads/d42a6168-134b-4488-8e3c-e51a39f269db.mov" autoplay muted loop playsinline></video>
           <div class="overlay-text">Track who you are. Build who you’re becoming.</div>
           <div>Looping Preview</div>
         </div>
@@ -673,22 +709,47 @@
         <span></span>
       </div>
       <div class="card">
-        <h3>What’s actually holding you back right now?</h3>
-        <div class="option-grid" data-group="quiz2">
-<button class="option" type="button">I don’t feel fully present in my life.</button>
-<button class="option" type="button">Why do I keep falling back into the same old habits?</button>
-<button class="option" type="button">I don’t have a system or structure to stay consistent.</button>
-<button class="option" type="button">Some days I’m motivated, and some days… nothing.</button>
-<button class="option" type="button">I overthink everything and then can’t even start.</button>
-<button class="option" type="button">It's just too easy to get distracted.</button>
-<button class="option" type="button">I just feel so drained all the time.</button>
-<button class="option" type="button">I try things, but it feels like I’m not getting anywhere.</button>
-<button class="option" type="button">I know I can do more, but I’m not living up to my goals.</button>
-<button class="option" type="button">I know what I should do… I just need a little support.</button>
-
+        <h3>What's holding you back</h3>
+        <div class="helper-text">Select up to 2</div>
+        <div class="option-grid" data-group="quiz2" data-max="2">
+          <button class="option" type="button">I don’t feel fully present in my life.</button>
+          <button class="option" type="button">Why do I keep falling back into the same old habits?</button>
+          <button class="option" type="button">I don’t have a system or structure to stay consistent.</button>
+          <button class="option" type="button">Some days I’m motivated, and some days… nothing.</button>
+          <button class="option" type="button">I overthink everything and then can’t even start.</button>
+          <button class="option" type="button">It's just too easy to get distracted.</button>
+          <button class="option" type="button">I just feel so drained all the time.</button>
+          <button class="option" type="button">I try things, but it feels like I’m not getting anywhere.</button>
+          <button class="option" type="button">I know I can do more, but I’m not living up to my goals.</button>
+          <button class="option" type="button">I know what I should do… I just need a little support.</button>
         </div>
         <div class="actions">
-          <button class="primary continue-btn" data-next="quiz3" disabled>Continue</button>
+          <button class="primary continue-btn" data-next="quiz2review" disabled>Continue</button>
+        </div>
+      </div>
+      <div class="card soft" style="margin-top:16px;">
+        <div class="section-title">Quick heads up</div>
+        <p style="color:var(--muted); font-size:13px; margin:0;">This will take less than 60 seconds to customize your experience. We want to help.</p>
+      </div>
+    </section>
+
+    <section id="quiz2review" class="screen">
+      <div class="progress">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="card">
+        <div class="section-title">Your focus mix</div>
+        <div class="review-tags" id="reviewTags"></div>
+        <div class="divider"></div>
+        <div class="section-title">What it means</div>
+        <p id="reviewMeaning" style="color:var(--muted); font-size:13px; margin:0;"></p>
+        <div class="actions">
+          <button class="primary" data-next="quiz3">Continue</button>
         </div>
       </div>
     </section>
@@ -1041,7 +1102,10 @@
         <svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>
       </button>
       <button class="nav-btn home active" data-tab="dashboard" aria-label="Dashboard">
-        <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 1 16 0M8 18h8M12 12l3-3"/></svg>
+        <svg viewBox="0 0 24 24">
+          <path class="house" d="M4 11l8-6 8 6M6 10v9h12v-9"/>
+          <path class="plus" d="M12 9v6M9 12h6"/>
+        </svg>
       </button>
       <button class="nav-btn" data-tab="missions" aria-label="Missions">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 5v-3M19 12h3M12 19v3M5 12H2"/></svg>
@@ -1066,6 +1130,9 @@
       } else {
         nav.style.display = 'none';
       }
+      if (id === 'quiz2review') {
+        updateReview();
+      }
     }
 
     function showTab(id) {
@@ -1088,11 +1155,96 @@
       });
     });
 
+    const reviewPairs = [
+      ["I don’t feel fully present in my life.", "Why do I keep falling back into the same old habits?", "Struggling with awareness and change; knows life isn’t fulfilling and feels stuck in patterns."],
+      ["I don’t feel fully present in my life.", "I don’t have a system or structure to stay consistent.", "Wants more out of life but lacks the framework to make it happen."],
+      ["I don’t feel fully present in my life.", "Some days I’m motivated, and some days… nothing.", "Has awareness but struggles with emotional and energy consistency."],
+      ["I don’t feel fully present in my life.", "I overthink everything and then can’t even start.", "Feels disconnected and paralyzed by their own mind; awareness without action."],
+      ["I don’t feel fully present in my life.", "It's just too easy to get distracted.", "Easily pulled away from meaningful engagement; overwhelmed by external stimuli."],
+      ["I don’t feel fully present in my life.", "I just feel so drained all the time.", "Emotionally and physically exhausted; life feels heavy and hard to engage with."],
+      ["I don’t feel fully present in my life.", "I try things, but it feels like I’m not getting anywhere.", "Experiments with growth but feels aimless; disconnected from results."],
+      ["I don’t feel fully present in my life.", "I know I can do more, but I’m not living up to my goals.", "Frustrated with themselves; aware of untapped potential."],
+      ["I don’t feel fully present in my life.", "I know what I should do… I just need a little support.", "Wants guidance to bridge the gap between awareness and action."],
+      ["Why do I keep falling back into the same old habits?", "I don’t have a system or structure to stay consistent.", "Trapped in patterns because of lack of process or plan."],
+      ["Why do I keep falling back into the same old habits?", "Some days I’m motivated, and some days… nothing.", "Struggles with follow-through; inconsistent effort creates repeated setbacks."],
+      ["Why do I keep falling back into the same old habits?", "I overthink everything and then can’t even start.", "Knows the problem but mental blocks keep progress stalled."],
+      ["Why do I keep falling back into the same old habits?", "It's just too easy to get distracted.", "Wants change but loses focus to everyday interruptions."],
+      ["Why do I keep falling back into the same old habits?", "I just feel so drained all the time.", "Feels caught in cycles with low energy to break free."],
+      ["Why do I keep falling back into the same old habits?", "I try things, but it feels like I’m not getting anywhere.", "Effort is there, but strategy or clarity is missing."],
+      ["Why do I keep falling back into the same old habits?", "I know I can do more, but I’m not living up to my goals.", "Frustrated and self-aware; potential isn’t being realized."],
+      ["Why do I keep falling back into the same old habits?", "I know what I should do… I just need a little support.", "Knows the path but feels alone in making the change."],
+      ["I don’t have a system or structure to stay consistent.", "Some days I’m motivated, and some days… nothing.", "Needs external or internal scaffolding to stay consistent."],
+      ["I don’t have a system or structure to stay consistent.", "I overthink everything and then can’t even start.", "Analysis paralysis due to lack of structure."],
+      ["I don’t have a system or structure to stay consistent.", "It's just too easy to get distracted.", "Lacks control over focus and routine; external chaos impacts progress."],
+      ["I don’t have a system or structure to stay consistent.", "I just feel so drained all the time.", "Low energy plus no framework makes growth feel impossible."],
+      ["I don’t have a system or structure to stay consistent.", "I try things, but it feels like I’m not getting anywhere.", "Effort exists but without structure, progress stalls."],
+      ["I don’t have a system or structure to stay consistent.", "I know I can do more, but I’m not living up to my goals.", "Awareness of potential, but missing tools to reach it."],
+      ["I don’t have a system or structure to stay consistent.", "I know what I should do… I just need a little support.", "Ready to act but needs guidance to implement a plan."],
+      ["Some days I’m motivated, and some days… nothing.", "I overthink everything and then can’t even start.", "Motivation swings and mental blocks make starting nearly impossible."],
+      ["Some days I’m motivated, and some days… nothing.", "It's just too easy to get distracted.", "Focus and drive are fragile; easily derailed."],
+      ["Some days I’m motivated, and some days… nothing.", "I just feel so drained all the time.", "Motivation struggles are compounded by low energy; hard to sustain action."],
+      ["Some days I’m motivated, and some days… nothing.", "I try things, but it feels like I’m not getting anywhere.", "Effort is inconsistent; progress is slow or invisible."],
+      ["Some days I’m motivated, and some days… nothing.", "I know I can do more, but I’m not living up to my goals.", "Self-awareness of potential, frustrated by inconsistency."],
+      ["Some days I’m motivated, and some days… nothing.", "I know what I should do… I just need a little support.", "Motivation is uneven; external support could make the difference."],
+      ["I overthink everything and then can’t even start.", "It's just too easy to get distracted.", "Mind and environment both block action; stuck in inaction."],
+      ["I overthink everything and then can’t even start.", "I just feel so drained all the time.", "Mental and physical fatigue prevent follow-through."],
+      ["I overthink everything and then can’t even start.", "I try things, but it feels like I’m not getting anywhere.", "Analysis without execution; feels trapped in cycles."],
+      ["I overthink everything and then can’t even start.", "I know I can do more, but I’m not living up to my goals.", "Clear potential, but mental barriers prevent progress."],
+      ["I overthink everything and then can’t even start.", "I know what I should do… I just need a little support.", "Knows the path but can’t begin without guidance."],
+      ["It's just too easy to get distracted.", "I just feel so drained all the time.", "Environment and energy are working against them; hard to focus or sustain action."],
+      ["It's just too easy to get distracted.", "I try things, but it feels like I’m not getting anywhere.", "Effort is undermined by lack of focus; struggles to see results."],
+      ["It's just too easy to get distracted.", "I know I can do more, but I’m not living up to my goals.", "Potential is clear, but attention is fragmented."],
+      ["It's just too easy to get distracted.", "I know what I should do… I just need a little support.", "Needs help creating focus and staying accountable."],
+      ["I just feel so drained all the time.", "I try things, but it feels like I’m not getting anywhere.", "Low energy makes effort feel wasted; progress is frustrating."],
+      ["I just feel so drained all the time.", "I know I can do more, but I’m not living up to my goals.", "Potential exists, but exhaustion blocks fulfillment."],
+      ["I just feel so drained all the time.", "I know what I should do… I just need a little support.", "Wants guidance; energy depletion prevents independent action."],
+      ["I try things, but it feels like I’m not getting anywhere.", "I know I can do more, but I’m not living up to my goals.", "Frustrated by slow results; aware of untapped potential."],
+      ["I try things, but it feels like I’m not getting anywhere.", "I know what I should do… I just need a little support.", "Making an effort but needs direction to succeed."],
+      ["I know I can do more, but I’m not living up to my goals.", "I know what I should do… I just need a little support.", "Self-aware and motivated; guidance or accountability could unlock action."]
+    ];
+
+    const makeKey = (a, b) => [a, b].sort().join('||');
+    const reviewMap = new Map(reviewPairs.map(([a, b, meaning]) => [makeKey(a, b), meaning]));
+    const singleMap = new Map([
+      [\"I don’t feel fully present in my life.\", \"Feeling disconnected; life is happening around you instead of through you.\"],
+      [\"Why do I keep falling back into the same old habits?\", \"Struggling with change; patterns feel hard to break even when you want to.\"],
+      [\"I don’t have a system or structure to stay consistent.\", \"Lacks a framework or routine; progress is difficult without a plan.\"],
+      [\"Some days I’m motivated, and some days… nothing.\", \"Motivation swings; effort is inconsistent and unpredictable.\"],
+      [\"I overthink everything and then can’t even start.\", \"Analysis paralysis; the mind blocks action before it begins.\"],
+      [\"It's just too easy to get distracted.\", \"External interruptions or lack of focus make it hard to stay on track.\"],
+      [\"I just feel so drained all the time.\", \"Low energy; physical or emotional fatigue is getting in the way of progress.\"],
+      [\"I try things, but it feels like I’m not getting anywhere.\", \"Effort is happening, but clarity, strategy, or results are missing.\"],
+      [\"I know I can do more, but I’m not living up to my goals.\", \"Aware of untapped potential; frustrated by the gap between capability and action.\"],
+      [\"I know what I should do… I just need a little support.\", \"Has knowledge and intent; just needs guidance, accountability, or a push to follow through.\"]\n    ]);
+
+    function updateReview() {
+      const grid = document.querySelector('.option-grid[data-group=\"quiz2\"]');
+      const tags = document.getElementById('reviewTags');
+      const meaning = document.getElementById('reviewMeaning');
+      if (!grid || !tags || !meaning) return;
+      const selections = Array.from(grid.querySelectorAll('.option.selected')).map(btn => btn.textContent.trim());
+      tags.innerHTML = selections.map(text => `<span class=\"tag\">${text}</span>`).join('') || '<span class=\"tag\">No selections yet</span>';
+      if (selections.length >= 2) {
+        const key = [selections[0], selections[1]].sort().join('||');
+        meaning.textContent = reviewMap.get(key) || \"You're juggling multiple pressures. We'll start by simplifying your focus and building small, reliable wins.\";
+      } else if (selections.length === 1) {
+        meaning.textContent = singleMap.get(selections[0]) || \"We’ll start by building clarity around this area.\";
+      } else {
+        meaning.textContent = \"Pick up to two options to see a focused insight.\";
+      }
+    }
+
     document.querySelectorAll('.option-grid').forEach(grid => {
       const options = Array.from(grid.querySelectorAll('.option'));
       const continueBtn = grid.parentElement.querySelector('.continue-btn');
+      const max = parseInt(grid.dataset.max || '999', 10);
       options.forEach(option => {
         option.addEventListener('click', () => {
+          const isSelected = option.classList.contains('selected');
+          if (!isSelected) {
+            const current = options.filter(btn => btn.classList.contains('selected')).length;
+            if (current >= max) return;
+          }
           option.classList.toggle('selected');
           if (continueBtn) {
             const anySelected = options.some(btn => btn.classList.contains('selected'));
