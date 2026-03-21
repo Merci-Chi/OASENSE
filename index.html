@@ -410,8 +410,8 @@
       border: 1px solid rgba(58,167,255,0.18);
       background: rgba(8, 12, 18, 0.75);
       color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
+      font-size: 13px;
+      line-height: 1.55;
       margin-top: 10px;
       box-shadow: 0 0 18px rgba(58,167,255,0.18);
     }
@@ -431,6 +431,11 @@
       background: rgba(6,10,16,0.8);
       box-shadow: 0 0 12px rgba(58,167,255,0.3);
       font-family: "Sora", "Space Grotesk", sans-serif;
+    }
+
+    .desc-card .desc-text {
+      display: block;
+      color: #cfe6ff;
     }
 
     .theme-row {
@@ -1356,7 +1361,7 @@
       }
       wrap.innerHTML = selections.map(item => {
         const desc = improveMap.get(item) || '';
-        return `<div class="desc-card"><span class="desc-title">${item}</span>${desc}</div>`;
+        return `<div class="desc-card"><span class="desc-title">${item}</span><span class="desc-text">${desc}</span></div>`;
       }).join('');
     }
 
