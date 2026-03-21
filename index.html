@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life OS</title>
+  <title>OASENSE</title>
   <style>
     :root {
       --bg: #05070b;
@@ -43,10 +43,10 @@
       position: absolute;
       inset: -20%;
       background:
-        radial-gradient(circle at 15% 10%, rgba(58,167,255,0.22), transparent 55%),
-        radial-gradient(circle at 80% 15%, rgba(0,229,255,0.16), transparent 55%),
-        radial-gradient(circle at 30% 85%, rgba(58,167,255,0.14), transparent 55%),
-        linear-gradient(120deg, rgba(5,7,12,0.95), rgba(8,12,18,0.92), rgba(5,7,12,0.98));
+        radial-gradient(circle at 15% 10%, rgba(58,167,255,0.28), transparent 55%),
+        radial-gradient(circle at 80% 15%, rgba(0,229,255,0.22), transparent 55%),
+        radial-gradient(circle at 30% 85%, rgba(58,167,255,0.2), transparent 55%),
+        linear-gradient(180deg, rgba(4,8,14,0.96), rgba(6,10,18,0.92), rgba(4,8,14,0.98));
       background-size: 140% 140%;
       animation: gradientDrift 18s ease-in-out infinite;
       filter: blur(6px);
@@ -57,11 +57,15 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(58,167,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(58,167,255,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.3;
-      transform: perspective(800px) rotateX(70deg);
+        linear-gradient(rgba(58,167,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58,167,255,0.08) 1px, transparent 1px),
+        linear-gradient(135deg, rgba(20,30,44,0.8) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(20,30,44,0.8) 25%, transparent 25%),
+        linear-gradient(315deg, rgba(20,30,44,0.8) 25%, transparent 25%),
+        linear-gradient(45deg, rgba(20,30,44,0.8) 25%, transparent 25%);
+      background-size: 50px 50px, 50px 50px, 26px 26px, 26px 26px, 26px 26px, 26px 26px;
+      opacity: 0.35;
+      transform: perspective(800px) rotateX(78deg);
       transform-origin: top;
     }
 
@@ -98,6 +102,14 @@
     .particles span:nth-child(6) { left: 35%; top: 50%; animation-duration: 13s; }
     .particles span:nth-child(7) { left: 90%; top: 45%; animation-duration: 17s; }
     .particles span:nth-child(8) { left: 5%; top: 55%; animation-duration: 19s; }
+    .particles span:nth-child(9) { left: 12%; top: 5%; animation-duration: 20s; }
+    .particles span:nth-child(10) { left: 28%; top: 28%; animation-duration: 16s; }
+    .particles span:nth-child(11) { left: 42%; top: 68%; animation-duration: 14s; }
+    .particles span:nth-child(12) { left: 62%; top: 22%; animation-duration: 15s; }
+    .particles span:nth-child(13) { left: 78%; top: 62%; animation-duration: 18s; }
+    .particles span:nth-child(14) { left: 88%; top: 30%; animation-duration: 22s; }
+    .particles span:nth-child(15) { left: 48%; top: 10%; animation-duration: 17s; }
+    .particles span:nth-child(16) { left: 6%; top: 82%; animation-duration: 21s; }
 
     @keyframes gradientDrift {
       0% { transform: translate3d(0, 0, 0); }
@@ -124,6 +136,35 @@
       position: relative;
       overflow: hidden;
       z-index: 1;
+    }
+
+    .blur-blobs {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blur-blobs span {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(58,167,255,0.35), transparent 65%);
+      filter: blur(24px);
+      opacity: 0.5;
+      animation: blobFloat 16s ease-in-out infinite;
+    }
+
+    .blur-blobs span:nth-child(1) { left: -40px; top: 80px; animation-duration: 18s; }
+    .blur-blobs span:nth-child(2) { right: -60px; top: 220px; animation-duration: 20s; }
+    .blur-blobs span:nth-child(3) { left: 40px; bottom: 120px; animation-duration: 22s; }
+    .blur-blobs span:nth-child(4) { right: 30px; bottom: 60px; animation-duration: 17s; }
+
+    @keyframes blobFloat {
+      0% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-30px) translateX(12px); }
+      100% { transform: translateY(0) translateX(0); }
     }
 
     .glow-orb {
@@ -623,30 +664,33 @@
     <div class="particles">
       <span></span><span></span><span></span><span></span>
       <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
     </div>
   </div>
 
   <div class="app">
+    <div class="blur-blobs"><span></span><span></span><span></span><span></span></div>
     <div class="glow-orb"></div>
 
     <section id="welcome" class="screen active">
-      <div class="top-title">Life OS</div>
+      <div class="top-title">OASENSE</div>
       <div class="card soft" style="padding:14px;">
         <div class="video-placeholder">
-          <video src="/Users/kiarawilliams/Downloads/d42a6168-134b-4488-8e3c-e51a39f269db.mov" autoplay muted loop playsinline></video>
+          <video src="/Users/kiarawilliams/Downloads/OASvid.mov" autoplay muted loop playsinline></video>
           <div class="overlay-text">Track who you are. Build who you’re becoming.</div>
           <div>Looping Preview</div>
         </div>
       </div>
       <div class="actions">
-        <button class="primary" data-next="theme">Get Started</button>
         <button class="secondary" data-next="login">Log In</button>
+        <button class="primary" data-next="theme">Get Started</button>
       </div>
-      <div class="small-note">Takes less than 60 seconds.</div>
+      <div class="small-note">Get Started — takes less than 60 seconds.</div>
     </section>
 
     <section id="login" class="screen">
-      <div class="top-title">Life OS</div>
+      <div class="top-title">OASENSE</div>
       <div class="card">
         <div class="section-title">Welcome back</div>
         <div class="input">
@@ -665,7 +709,7 @@
     </section>
 
     <section id="theme" class="screen">
-      <div class="top-title">Life OS</div>
+      <div class="top-title">OASENSE</div>
       <div class="card">
         <div class="chip">Style</div>
         <h3 style="margin:12px 0 6px;">Want a specific vibe?</h3>
@@ -747,7 +791,9 @@
         <div class="review-tags" id="reviewTags"></div>
         <div class="divider"></div>
         <div class="section-title">What it means</div>
-        <p id="reviewMeaning" style="color:var(--muted); font-size:13px; margin:0;"></p>
+        <p id="reviewMeaning" style="color:var(--muted); font-size:13px; margin:0 0 10px;"></p>
+        <div class="section-title">Why this matters</div>
+        <p id="reviewPosition" style="color:var(--muted); font-size:13px; margin:0;"></p>
         <div class="actions">
           <button class="primary" data-next="quiz3">Continue</button>
         </div>
@@ -853,7 +899,7 @@
     </section>
 
     <section id="dashboard" class="screen">
-      <div class="top-title">Life OS</div>
+      <div class="top-title">OASENSE</div>
       <div class="sections">
         <div class="card soft">
           <div class="section-title">Life Balance</div>
@@ -1222,7 +1268,8 @@
       const grid = document.querySelector('.option-grid[data-group="quiz2"]');
       const tags = document.getElementById('reviewTags');
       const meaning = document.getElementById('reviewMeaning');
-      if (!grid || !tags || !meaning) return;
+      const position = document.getElementById('reviewPosition');
+      if (!grid || !tags || !meaning || !position) return;
       const selections = Array.from(grid.querySelectorAll('.option.selected')).map(btn => btn.textContent.trim());
       tags.innerHTML = selections.map(text => `<span class="tag">${text}</span>`).join('') || '<span class="tag">No selections yet</span>';
       if (selections.length >= 2) {
@@ -1233,6 +1280,7 @@
       } else {
         meaning.textContent = "Pick up to two options to see a focused insight.";
       }
+      position.textContent = "Every blocker is a growth signal. OASENSE turns it into a simple system: clear priorities, daily missions, and a skill tree that builds momentum without overwhelm.";
     }
 
     document.querySelectorAll('.option-grid').forEach(grid => {
