@@ -141,7 +141,7 @@
       -webkit-backdrop-filter: blur(8px);
       padding: 22px 18px 86px;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       z-index: 1;
     }
 
@@ -150,30 +150,19 @@
       position: absolute;
       inset: 0;
       background-image:
-        radial-gradient(circle at 20% 15%, rgba(58,167,255,0.38), transparent 52%),
-        radial-gradient(circle at 80% 30%, rgba(0,229,255,0.28), transparent 58%),
-        radial-gradient(circle at 50% 70%, rgba(58,167,255,0.22), transparent 60%),
-        linear-gradient(180deg, rgba(10,18,28,0.86), rgba(8,12,18,0.92)),
-        linear-gradient(rgba(58,167,255,0.22) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(58,167,255,0.22) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+        radial-gradient(circle at 20% 15%, rgba(58,167,255,0.22), transparent 55%),
+        radial-gradient(circle at 80% 30%, rgba(0,229,255,0.18), transparent 60%),
+        linear-gradient(180deg, rgba(6,10,16,0.95), rgba(4,7,12,0.98)),
+        linear-gradient(rgba(58,167,255,0.28) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58,167,255,0.28) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 34px 34px, 34px 34px;
       background-position: center, center, center, center, center;
-      opacity: 0.7;
+      opacity: 0.8;
       z-index: 0;
       pointer-events: none;
     }
 
-    .app::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(120deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02), rgba(255,255,255,0.08));
-      mix-blend-mode: screen;
-      opacity: 0.55;
-      pointer-events: none;
-      z-index: 0;
-    }
+    .app::after { display: none; }
 
     .app > * {
       position: relative;
@@ -563,7 +552,7 @@
       padding: 10px 10px 16px;
       border-radius: 22px 22px 0 0;
       margin-bottom: 0;
-      z-index: 10;
+      z-index: 999;
     }
 
     .nav-btn {
