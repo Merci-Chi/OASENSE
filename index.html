@@ -404,6 +404,17 @@
       background: rgba(8,12,18,0.8);
     }
 
+    .desc-card {
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(58,167,255,0.18);
+      background: rgba(8, 12, 18, 0.75);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      margin-top: -2px;
+    }
+
     .theme-row {
       display: flex;
       gap: 10px;
@@ -808,17 +819,35 @@
         <span></span>
       </div>
       <div class="card">
-        <h3>What are you trying to improve?</h3>
+        <h3>What do you want to improve?</h3>
+        <div class="helper-text">Select as many as you need</div>
         <div class="option-grid" data-group="quiz3">
           <button class="option" type="button">Discipline</button>
+          <div class="desc-card">We build daily commitment loops and friction‑proof routines so you can follow through without relying on willpower. The app breaks big goals into repeatable missions and tracks streaks to reinforce consistency.</div>
+
           <button class="option" type="button">Energy</button>
+          <div class="desc-card">We map your energy patterns and suggest small resets that stack throughout the day. Check‑ins, movement prompts, and recovery cues help you feel steady instead of depleted.</div>
+
           <button class="option" type="button">Calm</button>
+          <div class="desc-card">We turn calm into a daily practice with short, guided decompression moments. You’ll get lightweight prompts that reduce noise and build a stable baseline over time.</div>
+
           <button class="option" type="button">Direction</button>
+          <div class="desc-card">We translate uncertainty into a simple plan with weekly priorities and next‑step clarity. The system keeps your goals visible so you always know what matters most.</div>
+
           <button class="option" type="button">Financial Control</button>
+          <div class="desc-card">We simplify money tracking into quick check‑ins and clear thresholds. Missions and milestones help you build control without overwhelming spreadsheets.</div>
+
           <button class="option" type="button">Relationships</button>
+          <div class="desc-card">We add small, intentional connection missions that rebuild consistency and trust. You’ll get prompts that focus on quality touchpoints, not forced volume.</div>
+
           <button class="option" type="button">Focus</button>
+          <div class="desc-card">We reduce distractions with short focus sprints and environment‑reset cues. The system rewards deep work streaks so attention becomes easier to sustain.</div>
+
           <button class="option" type="button">Motivation</button>
+          <div class="desc-card">We turn momentum into a system instead of a mood, using daily wins and visible progress. XP and identity stages keep you moving even when motivation dips.</div>
+
           <button class="option" type="button">Growth</button>
+          <div class="desc-card">We organize progress into a skill tree so you always see what’s next and why it matters. Unlocking new nodes makes improvement feel clear, paced, and achievable.</div>
         </div>
         <div class="actions">
           <button class="primary continue-btn" data-next="quiz4" disabled>Continue</button>
