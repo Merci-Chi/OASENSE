@@ -823,34 +823,35 @@
         <div class="helper-text">Select as many as you need</div>
         <div class="option-grid" data-group="quiz3">
           <button class="option" type="button">Discipline</button>
-          <div class="desc-card">We build daily commitment loops and friction‑proof routines so you can follow through without relying on willpower. The app breaks big goals into repeatable missions and tracks streaks to reinforce consistency.</div>
-
           <button class="option" type="button">Energy</button>
-          <div class="desc-card">We map your energy patterns and suggest small resets that stack throughout the day. Check‑ins, movement prompts, and recovery cues help you feel steady instead of depleted.</div>
-
           <button class="option" type="button">Calm</button>
-          <div class="desc-card">We turn calm into a daily practice with short, guided decompression moments. You’ll get lightweight prompts that reduce noise and build a stable baseline over time.</div>
-
           <button class="option" type="button">Direction</button>
-          <div class="desc-card">We translate uncertainty into a simple plan with weekly priorities and next‑step clarity. The system keeps your goals visible so you always know what matters most.</div>
-
           <button class="option" type="button">Financial Control</button>
-          <div class="desc-card">We simplify money tracking into quick check‑ins and clear thresholds. Missions and milestones help you build control without overwhelming spreadsheets.</div>
-
           <button class="option" type="button">Relationships</button>
-          <div class="desc-card">We add small, intentional connection missions that rebuild consistency and trust. You’ll get prompts that focus on quality touchpoints, not forced volume.</div>
-
           <button class="option" type="button">Focus</button>
-          <div class="desc-card">We reduce distractions with short focus sprints and environment‑reset cues. The system rewards deep work streaks so attention becomes easier to sustain.</div>
-
           <button class="option" type="button">Motivation</button>
-          <div class="desc-card">We turn momentum into a system instead of a mood, using daily wins and visible progress. XP and identity stages keep you moving even when motivation dips.</div>
-
           <button class="option" type="button">Growth</button>
-          <div class="desc-card">We organize progress into a skill tree so you always see what’s next and why it matters. Unlocking new nodes makes improvement feel clear, paced, and achievable.</div>
         </div>
         <div class="actions">
-          <button class="primary continue-btn" data-next="quiz4" disabled>Continue</button>
+          <button class="primary continue-btn" data-next="quiz3review" disabled>Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz3review" class="screen">
+      <div class="progress">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="card">
+        <div class="section-title">How we’ll support your focus</div>
+        <div id="improveCards"></div>
+        <div class="actions">
+          <button class="primary" data-next="quiz4">Continue</button>
         </div>
       </div>
     </section>
@@ -1207,6 +1208,9 @@
       if (id === 'quiz2review') {
         updateReview();
       }
+      if (id === 'quiz3review') {
+        updateImproveReview();
+      }
     }
 
     function showTab(id) {
@@ -1292,6 +1296,18 @@
       ["I know what I should do… I just need a little support.", "Has knowledge and intent; just needs guidance, accountability, or a push to follow through."]
     ]);
 
+    const improveMap = new Map([
+      ["Discipline", "We build daily commitment loops and friction‑proof routines so you can follow through without relying on willpower. The app breaks big goals into repeatable missions and tracks streaks to reinforce consistency."],
+      ["Energy", "We map your energy patterns and suggest small resets that stack throughout the day. Check‑ins, movement prompts, and recovery cues help you feel steady instead of depleted."],
+      ["Calm", "We turn calm into a daily practice with short, guided decompression moments. You’ll get lightweight prompts that reduce noise and build a stable baseline over time."],
+      ["Direction", "We translate uncertainty into a simple plan with weekly priorities and next‑step clarity. The system keeps your goals visible so you always know what matters most."],
+      ["Financial Control", "We simplify money tracking into quick check‑ins and clear thresholds. Missions and milestones help you build control without overwhelming spreadsheets."],
+      ["Relationships", "We add small, intentional connection missions that rebuild consistency and trust. You’ll get prompts that focus on quality touchpoints, not forced volume."],
+      ["Focus", "We reduce distractions with short focus sprints and environment‑reset cues. The system rewards deep work streaks so attention becomes easier to sustain."],
+      ["Motivation", "We turn momentum into a system instead of a mood, using daily wins and visible progress. XP and identity stages keep you moving even when motivation dips."],
+      ["Growth", "We organize progress into a skill tree so you always see what’s next and why it matters. Unlocking new nodes makes improvement feel clear, paced, and achievable."]
+    ]);
+
     function updateReview() {
       const grid = document.querySelector('.option-grid[data-group="quiz2"]');
       const tags = document.getElementById('reviewTags');
@@ -1309,6 +1325,21 @@
         meaning.textContent = "Pick up to two options to see a focused insight.";
       }
       position.textContent = "Every blocker is a growth signal. OASENSE turns it into a simple system: clear priorities, daily missions, and a skill tree that builds momentum without overwhelm.";
+    }
+
+    function updateImproveReview() {
+      const grid = document.querySelector('.option-grid[data-group="quiz3"]');
+      const wrap = document.getElementById('improveCards');
+      if (!grid || !wrap) return;
+      const selections = Array.from(grid.querySelectorAll('.option.selected')).map(btn => btn.textContent.trim());
+      if (!selections.length) {
+        wrap.innerHTML = '<div class="desc-card">Select at least one option to see how we help.</div>';
+        return;
+      }
+      wrap.innerHTML = selections.map(item => {
+        const desc = improveMap.get(item) || '';
+        return `<div class="desc-card"><strong style="color:var(--ink); font-weight:600; display:block; margin-bottom:6px;">${item}</strong>${desc}</div>`;
+      }).join('');
     }
 
     document.querySelectorAll('.option-grid').forEach(grid => {
